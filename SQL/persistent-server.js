@@ -1,13 +1,13 @@
 
 /* You already know how to create an http server from the previous
  * assignment; you can re-use most of that code here. */
-
+console.log('in server');
 var http = require("http");
 var url = require('url');
 
 var handlers = require('./request-handler');
 var serverHelpers = require('./server-helpers');
-
+console.log('done requiring');
 var port = 3000;
 var ip = "127.0.0.1";
 

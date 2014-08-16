@@ -24,9 +24,13 @@ exports.postMessage = function(req, res) {
       });
   };
 
+  //grab POST request and pass data to callback
   parseData(req, function(_, msg) {
-      message = msg;
+      message = msg;//parsed POST data
+      //query database for UserID, if results===true pass results
+      //into resultsCallback, else create new user with saveUser
       findUser(msg.username, function (err, results) {
+        console.log('empty result',results);
         // no results/0 results
         if (!results || !results.length) {
           // create the user, then post the message
