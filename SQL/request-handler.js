@@ -11,15 +11,19 @@ var findUser = db.findUser;
 exports.postMessage = function(req, res) {
   // declare this variable so we can retain access to it throughout the entire promise chain.
   var message;
-
+  console.log('received post')
   var resultsCallback = function (results) {
       var chat = {
         message: message.message,
-        userid: results[0].id,
+        userid: results[0].ID,
         roomname: message.roomname
       };
 
-      saveMessage(chat.message, chat.userid, chat.roomname, function () {
+      console.log('in results callback with user info turned chat object', chat, results);
+      //saveMessage should make a mysql query and post information to the database,
+      //and then invoke sendResponse to send res back to client
+      saveMessage(chat.message, chat.userid, chat.roomname, function (message) {
+        console.log('results callback is saving a message:', message);
         serverHelpers.sendResponse(res, message);
       });
   };
@@ -29,8 +33,8 @@ exports.postMessage = function(req, res) {
       message = msg;//parsed POST data
       //query database for UserID, if results===true pass results
       //into resultsCallback, else create new user with saveUser
-      findUser(msg.username, function (err, results) {
-        console.log('empty result',results);
+      findUser(message.username, function (err, results) {
+        //results = username messages from database
         // no results/0 results
         if (!results || !results.length) {
           // create the user, then post the message
